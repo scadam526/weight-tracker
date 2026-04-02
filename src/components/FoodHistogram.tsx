@@ -21,7 +21,7 @@ const CustomXAxisTick = ({ x, y, payload, chartData }: any) => {
 };
 
 export default function FoodHistogram({ data }: { data: FoodEntry[] }) {
-    const [daysRange, setDaysRange] = useState(14); // default 2 weeks
+    const [daysRange, setDaysRange] = useState(7); // default 7 days
 
     const chartData = useMemo(() => {
         const cutoff = subDays(new Date(), daysRange);
@@ -64,7 +64,7 @@ export default function FoodHistogram({ data }: { data: FoodEntry[] }) {
 
             <div className="chart-container" style={{ width: '100%', height: 400, minHeight: 400 }}>
                 <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
-                    <BarChart data={chartData} margin={{ top: 10, right: 0, left: -25, bottom: 0 }}>
+                    <BarChart data={chartData} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
                         <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" vertical={false} />
                         <XAxis dataKey="dateStr" stroke="var(--text-secondary)" tick={<CustomXAxisTick chartData={chartData} />} />
                         <YAxis stroke="var(--text-secondary)" tick={{ fill: 'var(--text-secondary)' }} />

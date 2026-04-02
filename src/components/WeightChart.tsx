@@ -6,7 +6,7 @@ import { useState, useMemo } from 'react';
 type WeightEntry = { date: Date; weight: number };
 
 export default function WeightChart({ data }: { data: WeightEntry[] }) {
-    const [daysRange, setDaysRange] = useState(28);
+    const [daysRange, setDaysRange] = useState(7);
 
     const filteredData = useMemo(() => {
         const cutoff = subDays(new Date(), daysRange);
@@ -97,7 +97,7 @@ export default function WeightChart({ data }: { data: WeightEntry[] }) {
 
             <div className="chart-container" style={{ width: '100%', height: 400, minHeight: 400 }}>
                 <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
-                    <LineChart data={chartData} margin={{ top: 10, right: 0, left: -25, bottom: 0 }}>
+                    <LineChart data={chartData} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
                         <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" vertical={false} />
                         <XAxis dataKey="dateStr" stroke="var(--text-secondary)" tick={{ fill: 'var(--text-secondary)' }} tickMargin={10} />
                         <YAxis stroke="var(--text-secondary)" tick={{ fill: 'var(--text-secondary)' }} domain={[Math.floor(minWeight - 1), Math.ceil(maxWeight + 1)]} />
