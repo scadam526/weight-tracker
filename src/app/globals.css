@@ -51,6 +51,12 @@ body {
   border-color: rgba(255, 255, 255, 0.15);
 }
 
+@media (max-width: 768px) {
+  .glass-panel {
+    padding: 12px;
+  }
+}
+
 .btn-primary {
   background: var(--accent-primary);
   color: white;
