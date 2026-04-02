@@ -91,6 +91,7 @@ body {
   margin-bottom: 8px;
   background: linear-gradient(to right, #a78bfa, #f472b6);
   -webkit-background-clip: text;
+  background-clip: text;
   color: transparent;
 }
 
