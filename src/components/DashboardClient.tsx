@@ -26,10 +26,18 @@ export default function DashboardClient({ weightData1, weightData2, foodData1, f
     };
 
     const combinedWeight = [...processArraySafe(weightData1), ...processArraySafe(weightData2)];
-    const weightData = combinedWeight.map((d: any) => ({
-        date: parseFatSecretDate(d.date_int),
-        weight: Math.round(parseFloat(d.weight_kg) * 2.20462 * 10) / 10
-    }));
+    const weightMap = new Map<string, { date: Date, weight: number }>();
+    combinedWeight.forEach((d: any) => {
+        const weight = Math.round(parseFloat(d.weight_kg) * 2.20462 * 10) / 10;
+        const existing = weightMap.get(d.date_int);
+        if (!existing || weight < existing.weight) {
+            weightMap.set(d.date_int, {
+                date: parseFatSecretDate(d.date_int),
+                weight
+            });
+        }
+    });
+    const weightData = Array.from(weightMap.values()).sort((a, b) => a.date.getTime() - b.date.getTime());
 
     const combinedFood = [...processArraySafe(foodData1), ...processArraySafe(foodData2)];
     const foodData = combinedFood.map((d: any) => ({

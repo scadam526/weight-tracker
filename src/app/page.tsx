@@ -34,9 +34,7 @@ export default async function Home() {
                     __html: `
                     body { background-image: radial-gradient(circle at 50% -20%, #2e1065, var(--bg-base) 80%); }
                 `}} />
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
-                    <h1 className="page-title">FatSecret Dashboard</h1>
-                </div>
+
                 <DashboardClient
                     weightData1={weightData1}
                     weightData2={weightData2}

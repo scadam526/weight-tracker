@@ -55,6 +55,14 @@ body {
   .glass-panel {
     padding: 12px;
   }
+
+  .metric-value {
+    font-size: 1.125rem;
+  }
+
+  .recharts-text {
+    font-size: 0.75rem;
+  }
 }
 
 .btn-primary {
