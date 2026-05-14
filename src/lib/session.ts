@@ -24,13 +24,15 @@ export async function decrypt(input: string): Promise<any> {
 }
 
 export async function setSession(tokenData: { oauth_token: string; oauth_token_secret: string }) {
-    const session = await encrypt({ fatsecretToken: tokenData, expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) });
+    const expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+    const session = await encrypt({ fatsecretToken: tokenData, expires });
     const cookiesStore = await cookies();
     cookiesStore.set('session', session, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
-        path: '/'
+        path: '/',
+        expires
     });
 }
 
