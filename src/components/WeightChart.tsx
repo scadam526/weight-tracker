@@ -202,7 +202,7 @@ export default function WeightChart({ data }: { data: WeightEntry[] }) {
                     <LineChart data={chartData} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
                         <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" vertical={false} />
                         <XAxis dataKey="dateStr" stroke="var(--text-secondary)" tick={{ fill: 'var(--text-secondary)' }} tickMargin={10} />
-                        <YAxis stroke="var(--text-secondary)" tick={{ fill: 'var(--text-secondary)' }} domain={[Math.floor(minWeight - 1), Math.ceil(maxWeight + 1)]} />
+                        <YAxis stroke="var(--text-secondary)" tick={{ fill: 'var(--text-secondary)' }} domain={[Math.floor(minWeight - 1), 240]} />
                         <Tooltip />
                         <Line type="linear" dataKey="trend" stroke="var(--chart-other)" strokeWidth={2} strokeDasharray="5 5" dot={false} activeDot={false} />
                         <Line type="monotone" dataKey="weight" stroke="var(--accent-primary)" strokeWidth={4} dot={{ r: 4, fill: 'var(--bg-base)', strokeWidth: 2 }} activeDot={{ r: 7 }} />
