@@ -15,7 +15,7 @@ function processArraySafe(dataObj: any) {
     return Array.isArray(dataObj.month.day) ? dataObj.month.day : [dataObj.month.day];
 }
 
-export default function DashboardClient({ weightData1, weightData2, foodData1, foodData2, lastFetchTime }: { weightData1: any, weightData2: any, foodData1: any, foodData2: any, lastFetchTime: string }) {
+export default function DashboardClient({ weightDataList, foodDataList, lastFetchTime }: { weightDataList: any[], foodDataList: any[], lastFetchTime: string }) {
     const router = useRouter();
     const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -25,7 +25,7 @@ export default function DashboardClient({ weightData1, weightData2, foodData1, f
         setTimeout(() => setIsRefreshing(false), 1000); // give it a min spin time
     };
 
-    const combinedWeight = [...processArraySafe(weightData1), ...processArraySafe(weightData2)];
+    const combinedWeight = weightDataList.flatMap(processArraySafe);
     const weightMap = new Map<string, { date: Date, weight: number }>();
     combinedWeight.forEach((d: any) => {
         const weight = Math.round(parseFloat(d.weight_kg) * 2.20462 * 10) / 10;
@@ -39,7 +39,7 @@ export default function DashboardClient({ weightData1, weightData2, foodData1, f
     });
     const weightData = Array.from(weightMap.values()).sort((a, b) => a.date.getTime() - b.date.getTime());
 
-    const combinedFood = [...processArraySafe(foodData1), ...processArraySafe(foodData2)];
+    const combinedFood = foodDataList.flatMap(processArraySafe);
     const foodData = combinedFood.map((d: any) => ({
         date: parseFatSecretDate(d.date_int),
         calories: parseFloat(d.calories || 0),

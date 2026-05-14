@@ -11,20 +11,29 @@ export default async function Home() {
 
     try {
         const now = new Date();
-        const thisMonthDate = new Date(Date.UTC(now.getFullYear(), now.getMonth(), 15));
-        const prevMonthDate = new Date(Date.UTC(now.getFullYear(), now.getMonth() - 1, 15));
+        const startYear = 2026;
+        const startMonth = 2; // March is month index 2
 
-        const todayEpoch = Math.floor(thisMonthDate.getTime() / 86400000);
-        // Ensure we cover the prior month fully
-        const lastMonthEpoch = Math.floor(prevMonthDate.getTime() / 86400000);
+        const currentYear = now.getFullYear();
+        const currentMonth = now.getMonth();
+        const totalMonths = (currentYear - startYear) * 12 + (currentMonth - startMonth) + 1;
 
-        // Weight
-        const weightData1 = await fetchFatSecretAPI('weights.get_month', { date: todayEpoch.toString() }, session.fatsecretToken.oauth_token, session.fatsecretToken.oauth_token_secret);
-        const weightData2 = await fetchFatSecretAPI('weights.get_month', { date: lastMonthEpoch.toString() }, session.fatsecretToken.oauth_token, session.fatsecretToken.oauth_token_secret);
+        const epochsToFetch: number[] = [];
+        for (let i = 0; i < totalMonths; i++) {
+            const d = new Date(Date.UTC(now.getFullYear(), now.getMonth() - i, 15));
+            epochsToFetch.push(Math.floor(d.getTime() / 86400000));
+        }
 
-        // Foods
-        const foodData1 = await fetchFatSecretAPI('food_entries.get_month', { date: todayEpoch.toString() }, session.fatsecretToken.oauth_token, session.fatsecretToken.oauth_token_secret);
-        const foodData2 = await fetchFatSecretAPI('food_entries.get_month', { date: lastMonthEpoch.toString() }, session.fatsecretToken.oauth_token, session.fatsecretToken.oauth_token_secret);
+        // Fetch up to 6 months of history
+        const weightPromises = epochsToFetch.map(epoch => 
+            fetchFatSecretAPI('weights.get_month', { date: epoch.toString() }, session.fatsecretToken.oauth_token, session.fatsecretToken.oauth_token_secret)
+        );
+        const foodPromises = epochsToFetch.map(epoch => 
+            fetchFatSecretAPI('food_entries.get_month', { date: epoch.toString() }, session.fatsecretToken.oauth_token, session.fatsecretToken.oauth_token_secret)
+        );
+
+        const weightDataList = await Promise.all(weightPromises);
+        const foodDataList = await Promise.all(foodPromises);
 
         const fetchTime = new Date().toLocaleString();
 
@@ -36,10 +45,8 @@ export default async function Home() {
                 `}} />
 
                 <DashboardClient
-                    weightData1={weightData1}
-                    weightData2={weightData2}
-                    foodData1={foodData1}
-                    foodData2={foodData2}
+                    weightDataList={weightDataList}
+                    foodDataList={foodDataList}
                     lastFetchTime={fetchTime}
                 />
             </div>
